@@ -1,4 +1,7 @@
 import java.util.PriorityQueue;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Arrays;
 
 /**
  * Heap Class with extend features like searching for an element, merging heaps,
@@ -6,66 +9,133 @@ import java.util.PriorityQueue;
  * @author Sena Ulukaya
  * 
  */
-public class Heap<E> {
-    private PriorityQueue<E> data;
-
+public class Heap<E> extends PriorityQueue<E>{
     /**
-     * Constructor
+     * Constructor is calling PriorityQueue's constructor as its base class.
      */
     public Heap(){
-        //TO-DO
+        super();
     }
     
-    public HeapIterator<E> iterator(){
+    /**
+     * Initialize a new heapIterator for the heap.
+     * @return the iterator.
+     */
+    public HeapIterator<E> heapIterator(){
         return new HeapIter();
     }
 
     /**
-     * 
+     * Search for an element.
      * @param element for searching
      * @return true when element is found, false otherwise.
      */
      public Boolean searchElement(E element){
-        return true;
-    }
+        HeapIterator<E> it = heapIterator();
+        
+        while(it.hasNext()){
+            if(it.next().equals(element)) return true;
+        }
 
+        return false;
+    }
+  
     /**
-     * 
+     * Merge this heap with another heap.
      * @param other heap for merging 2 heaps.
+     * @throws ClassCastException if the class of an element of the specified Heap prevents it from being added to this heap.
+     * @throws NullPointerException - if the specified Heap contains a null element and this Heap does not permit null elements, 
+     * or if the specified collection is null.
+     * @throws IllegalArgumentException - if some property of an element of the specified Heap prevents it from being added to this queue, 
+     * or if the specified collection is this queue
+     * @throws IllegalStateException - if not all the elements can be added at this time due to insertion restrictions
      */
-    public void merge(PriorityQueue<E> other){
-        //TO-DO
+    public void merge(Heap<E> other) throws ClassCastException,NullPointerException,IllegalArgumentException,IllegalStateException {
+        this.addAll(other);
     }
 
     /**
-     * 
-     * @param index is the one which will be removed.
+     * Remove ith largest element from the Heap.
+     * @param index is the ith element order which will be removed from the heap.
      * @return the removed element if it does exist.
      * @throws IndexOutOfBoundsException if parameter is out of bounds of the heap.
      */
+    @SuppressWarnings("unchecked")
     public E removeLargestIth(int index) throws IndexOutOfBoundsException{
-        //TO-DO
+        if(index <= 0 || index > this.size()) throw new IndexOutOfBoundsException();
+        E[] arr = (E[]) this.toArray();
+        Arrays.sort(arr);
+        E element = arr[this.size()-index];
+        if(this.remove(element)) return element;
         return null;
+    }
+    
+    /**
+     * display the heap.
+     */
+    @SuppressWarnings("unchecked")
+    public void display(){
+        E[] arr = (E[])this.toArray();
+        Arrays.sort(arr);
+        System.out.println(Arrays.toString(arr));      
     }
 
     private class HeapIter implements HeapIterator<E> {
+        private Iterator<E> it;
+        private E lastItem = null;
+        private int nextCount = 0;
 
+        public HeapIter(){
+            it = iterator();
+            lastItem = null;
+        }
+        
+        /**
+         * Indicate whether movement forward is defined.
+         * @return true if call to next will not throw an exception
+         */
         @Override
         public boolean hasNext() {
-            // TODO Auto-generated method stub
-            return false;
+            return(it.hasNext());
         }
 
+        /** Move the iterator forward and return the next item.
+         * @return The next item in the list
+         * @throws NoSuchElementException if there is no such object
+         */
         @Override
-        public E next() {
-            // TODO Auto-generated method stub
-            return null;
+        public E next() throws NoSuchElementException{
+            lastItem = it.next();
+            nextCount++;
+            return(lastItem);
         }
 
+         /** Remove the last item returned. This can only be done once per call to next.
+         *  @throws IllegalStateException if next was not called prior to calling this method.
+         */
         @Override
-        public void set(E value) {
-            // TODO Auto-generated method stub
-            
+        public void remove() throws IllegalStateException{
+            it.remove();
+        }
+
+        /** Set the last element returned by next() with the value.
+         * @param value which to replace the last element returned by next.
+         * @throws IllegalStateException if next() has not called yet.
+         */
+        @Override
+        public E set(E value) throws IllegalStateException{
+            if(lastItem == null) throw new IllegalStateException();
+            it.remove();
+            offer(value);
+
+            it = iterator();
+            for (int i = 0; i < nextCount; i++) {
+               it.next();
+            }
+
+            E item = lastItem;
+            lastItem = null;
+            return item;
         }
 
     }
