@@ -2,6 +2,7 @@ import java.util.PriorityQueue;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Heap Class with extend features like searching for an element, merging heaps,
@@ -9,12 +10,16 @@ import java.util.Arrays;
  * @author Sena Ulukaya
  * 
  */
-public class Heap<E> extends PriorityQueue<E>{
+public class Heap<E extends Comparable<E>> extends PriorityQueue<E> implements Comparable<Heap<E>>{
     /**
      * Constructor is calling PriorityQueue's constructor as its base class.
      */
     public Heap(){
         super();
+    }
+
+    public Heap(Comparator<? super E> comp){
+        super(7, comp);
     }
     
     /**
@@ -80,6 +85,17 @@ public class Heap<E> extends PriorityQueue<E>{
         System.out.println(Arrays.toString(arr));      
     }
 
+    /**
+     * Compares peek values of the heaps.
+     * @param o other heap to compare.
+     * @return 1 if heap's peek is bigger, -1 if smaller and 0 if they're equal.
+     */
+    @Override
+    public int compareTo(Heap<E> o) {
+        if(this.peek().compareTo(o.peek()) < 0) return -1;
+        if(this.peek().compareTo(o.peek()) > 0) return 1;
+        else return 0;
+    }
     private class HeapIter implements HeapIterator<E> {
         private Iterator<E> it;
         private E lastItem = null;
