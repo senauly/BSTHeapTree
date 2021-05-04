@@ -79,7 +79,7 @@ public class BSTHeapTree<E extends Comparable<E>> {
         return(findRec(root,item));
     }
 
-    public E findMode(){
+    public E find_mode(){
         HeapNode<E> result = findModeRec(root, root.data.peek());
         if(result != null) return(result.getData());
         else return null;
