@@ -2,6 +2,11 @@ public class HeapNode<E extends Comparable<E>> implements Comparable<HeapNode<E>
     private E data = null;
     private int frequency = 0;
 
+    public HeapNode(){
+        data = null;
+        frequency = 0;
+    }
+    
     public HeapNode(E item){
         data = item;
         frequency = 1;
@@ -12,7 +17,15 @@ public class HeapNode<E extends Comparable<E>> implements Comparable<HeapNode<E>
     }
 
     public String toString() {
-        return(data.toString() + "," + frequency);
+        return(data.toString() + "." + frequency);
+    }
+
+    public int getFrequency(){
+        return frequency;
+    }
+
+    public E getData(){
+        return data;
     }
 
     /**
