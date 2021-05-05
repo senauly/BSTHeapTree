@@ -18,6 +18,10 @@ public class Heap<E extends Comparable<E>> extends PriorityQueue<E> implements C
         super();
     }
 
+    /**
+     * Creates a Heap with the capacity 7 that orders its elements according to the specified comparator.
+     * @param comp the comparator that will be used to order this heap.
+     */
     public Heap(Comparator<? super E> comp){
         super(7, comp);
     }
@@ -68,9 +72,9 @@ public class Heap<E extends Comparable<E>> extends PriorityQueue<E> implements C
     @SuppressWarnings("unchecked")
     public E removeLargestIth(int index) throws IndexOutOfBoundsException{
         if(index <= 0 || index > this.size()) throw new IndexOutOfBoundsException();
-        E[] arr = (E[]) this.toArray();
+        Object[] arr = this.toArray();
         Arrays.sort(arr);
-        E element = arr[this.size()-index];
+        E element = (E) arr[this.size()-index];
         if(this.remove(element)) return element;
         return null;
     }
@@ -96,6 +100,10 @@ public class Heap<E extends Comparable<E>> extends PriorityQueue<E> implements C
         if(this.peek().compareTo(o.peek()) > 0) return 1;
         else return 0;
     }
+    
+    /**
+     * HeapIter class with set method. 
+     */
     private class HeapIter implements HeapIterator<E> {
         private Iterator<E> it;
         private E lastItem = null;

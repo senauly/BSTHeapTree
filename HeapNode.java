@@ -1,3 +1,6 @@
+/**
+ * HeapNode Class representing node of the Heap with data and frequency fields.
+ */
 public class HeapNode<E extends Comparable<E>> implements Comparable<HeapNode<E>>{
     private E data = null;
     private int frequency = 0;
@@ -12,24 +15,39 @@ public class HeapNode<E extends Comparable<E>> implements Comparable<HeapNode<E>
         frequency = 1;
     }
 
+    /**
+     * change frequency of the node.
+     * @param freq of the node.
+     */
     public void changeFrequecy(int freq){
         frequency = freq;
     }
-
+    
+    /**
+     * display node with its data and frequency.
+     */
     public String toString() {
         return(data.toString() + "." + frequency);
     }
 
+    /**
+     * get frequency.
+     * @return frequency
+     */
     public int getFrequency(){
         return frequency;
     }
 
+    /**
+     * Get data.
+     * @return data
+     */
     public E getData(){
         return data;
     }
 
     /**
-     * Compares datas of the HeapNodes.
+     * Compare datas of the HeapNodes.
      * @param o other HeapNode to compare.
      * @return 1 if data is bigger, -1 if smaller and 0 if they're equal.
      */

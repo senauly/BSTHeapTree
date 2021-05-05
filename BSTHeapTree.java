@@ -1,10 +1,15 @@
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
+/**
+ * BSTHeapTree Class for keeping Heap data nodes inside of the BST.
+ */
 public class BSTHeapTree<E extends Comparable<E>> {
     private BSTNode<Heap<HeapNode<E>>> root;
 
+    /**
+     * BSTNode inner class representing nodes of the BSTHeapTree.
+     */
     private class BSTNode<T>{
         private T data = null;
         private BSTNode<T> right;
@@ -59,33 +64,66 @@ public class BSTHeapTree<E extends Comparable<E>> {
         return (root.left == null && root.right == null);
     }
 
+    /**
+     * Add Heap nodes.
+     * @param data Heap to add into BSTHeapTree.
+     */
     public void addNode(Heap<HeapNode<E>> data){
         root = addNodeRec(root, data);
     }
 
+    /**
+     * Remove Heap nodes.
+     * @param data Heap to remove from BSTHeapTree.
+     */
     public void removeNode(Heap<HeapNode<E>> data){
         root = removeNodeRec(root,data);
     }
 
+    /**
+     *  Insert item to the BSTHeapTree.
+     * @param item to add into heap of the BSTHeapTree.
+     * @return the number of occurrences of the item after insertion
+     */
     public int add(E item){
         return(addItemRec(root, item));
     }
 
+    /**
+     *  Remove item from the BSTHeapTree.
+     * @param item to remove from heap of the BSTHeapTree.
+     * @return the number of occurrences of the item after removal.
+     */
     public int remove(E item){
         return(removeItemRec(root, item));
     }
 
+    /**
+     * Find the number of occurrences of the item.
+     * @param item to find.
+     * @return the number of occurrences of the item in the BSTHeapTree
+     */
     public int find(E item){
         return(findRec(root,item));
     }
 
+    /**
+     * Find mode of this BSTHeapTree.
+     * @return the mode if exist, else null.
+     */
     public E find_mode(){
         HeapNode<E> result = findModeRec(root, root.data.peek());
         if(result != null) return(result.getData());
         else return null;
     }
 
-    //T = Heap<HeapNode<E>>
+    /**
+     * Recursively Add node to the BSTHeapTree.
+     * @param <T> representing Heap<HeapNode<E>>
+     * @param curr The current root of the subtree
+     * @param data The Heap to be inserted
+     * @return The current local root that now contains the inserted item
+     */
     private <T extends Comparable<T>> BSTNode<T> addNodeRec(BSTNode<T> curr, T data){
         if (curr == null) {
             return new BSTNode<>(data);
@@ -96,6 +134,12 @@ public class BSTHeapTree<E extends Comparable<E>> {
         return curr;
     }
 
+  /** 
+   * Recursively remove node.
+   * @param curr The root of the current subtree
+   * @param data The heap to be deleted
+   * @return The modified curr local root that does not contain the item.
+   */
     private <T extends Comparable<T>> BSTNode<T> removeNodeRec(BSTNode<T> curr, T data){
         if(curr == null) return null;
         
@@ -121,6 +165,12 @@ public class BSTHeapTree<E extends Comparable<E>> {
         return curr;
     }
 
+    /**
+     * Get the peek node without removing.
+     * @param <T> representing Heap<HeapNode<E>>
+     * @param parent Heap node
+     * @return The current parent node.
+     */
     private <T extends Comparable<T>> T getPeekNode(BSTNode<T> parent){
         if (parent.right.right == null) {
             T peek = parent.right.data;
@@ -131,6 +181,12 @@ public class BSTHeapTree<E extends Comparable<E>> {
         else return getPeekNode(parent.right);
     }
 
+    /**
+     * Add item recursively to the Heap Node of the BSTHeapTree.
+     * @param curr Heap node
+     * @param item to add
+     * @return frequency of the item after adding.
+     */
     private int addItemRec(BSTNode<Heap<HeapNode<E>>> curr,E item){
         if(curr == null){
             HeapNode<E> temp = new HeapNode<>(item);
@@ -160,6 +216,12 @@ public class BSTHeapTree<E extends Comparable<E>> {
         else return(addItemRec(curr.left,item));
     }
 
+    /**
+     * Remove item recursively to the Heap Node of the BSTHeapTree.
+     * @param curr Heap node
+     * @param item to remove
+     * @return frequency of the item after removing
+     */
     private int removeItemRec(BSTNode<Heap<HeapNode<E>>> curr,E item){
         if(curr == null){
             throw new NoSuchElementException();
@@ -174,12 +236,12 @@ public class BSTHeapTree<E extends Comparable<E>> {
                 HeapNode<E> temp = it.next();
                 freq = temp.getFrequency();
                 if(temp.getData().equals(item) && freq > 1){
-                    temp.changeFrequecy(freq-1);
+                    temp.changeFrequecy(--freq);
                     removed = true;
                 }
 
                 else if(temp.getData().equals(item) && freq == 1){
-                    temp.changeFrequecy(0);
+                    temp.changeFrequecy(--freq);
                     curr.data.remove(temp);
                     removed = true;
                 }
@@ -212,6 +274,12 @@ public class BSTHeapTree<E extends Comparable<E>> {
 
     }
 
+    /**
+     * Find the frequency of a item recursively.
+     * @param curr Heap node.
+     * @param item to find
+     * @return frequency of the item.
+     */
     private int findRec(BSTNode<Heap<HeapNode<E>>> curr,E item){
         if(curr == null){
             throw new NoSuchElementException();
@@ -231,6 +299,12 @@ public class BSTHeapTree<E extends Comparable<E>> {
         else return(findRec(curr.left,item));
     }
 
+    /**
+     * Find mode of the BSTHeapTree.
+     * @param curr Heap node.
+     * @param largestFreq of the current.
+     * @return mode of the BSTHeapTree.
+     */
     private HeapNode<E> findModeRec(BSTNode<Heap<HeapNode<E>>> curr, HeapNode<E> largestFreq){
         Iterator<HeapNode<E>> it = curr.data.iterator();
         while(it.hasNext()){
@@ -251,6 +325,9 @@ public class BSTHeapTree<E extends Comparable<E>> {
         return largestFreq;
     }
 
+    /**
+     * Display the tree while traversing preorder.
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         preOrderTraverse(root, 1, sb);
@@ -258,9 +335,9 @@ public class BSTHeapTree<E extends Comparable<E>> {
     }
     
     /** Perform a preorder traversal.
-         @param node The local root
-        @param depth The depth
-        @param sb The string buffer to save the output
+     * @param node The local root
+     * @param depth The depth
+     * @param sb The string buffer to save the output
     */
     private <T extends Comparable<T>> void preOrderTraverse(BSTNode<T> node, int depth, StringBuilder sb){
         for (int i = 1; i < depth; i++) sb.append("  ");
