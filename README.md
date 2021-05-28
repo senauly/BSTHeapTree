@@ -29,14 +29,14 @@ There's a test class where I tested each method at BSTHeapTree as follows:
 To run this project in terminal:
 
 ```
-$ cd ../lorem
+$ cd ../BSTHeapTree
 $ javac *.java
 $ java Test
 ```
 
 or use the makeFile,
 ```
-$ cd ../lorem
+$ cd ../BSTHeapTree
 $ make
 ```
 
